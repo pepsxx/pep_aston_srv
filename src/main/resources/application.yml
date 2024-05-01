@@ -1,5 +1,15 @@
 spring:
   application:
     name: pep_aston
+  jpa:
+    properties:
+      hibernate:
+        default_schema: postgres
+        connection:
+          url: jdbc:postgresql://localhost:4011/postgres
+          username: admin
+          password: qQ111111
+        hbm2ddl:
+          auto: update
 server:
   port: 8080
