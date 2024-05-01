@@ -1,0 +1,8 @@
+services:
+  aston_db_ps:
+    image: postgres
+    ports:
+      - "4011:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: qQ111111
