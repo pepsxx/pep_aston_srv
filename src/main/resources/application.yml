@@ -1,15 +1,17 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: pep_aston
-  jpa:
-    properties:
-      hibernate:
-        default_schema: postgres
-        connection:
-          url: jdbc:postgresql://localhost:4011/postgres
-          username: admin
-          password: qQ111111
-        hbm2ddl:
-          auto: update
-server:
-  port: 8080
+
+  jpa.properties.hibernate:
+    connection:
+      url: jdbc:postgresql://localhost:40254/postgres
+      username: admin
+      password: qQ111111
+      driver_class: org.postgresql.Driver
+    default_schema: public
+    hbm2ddl.auto: validate                                      # update # validate
+    show_sql: true   # Показывает SQL запросы в консоли         # true   # false
+    format_sql: true # Показывает SQL запросы не в одну строчку # true   # false
