@@ -12,6 +12,6 @@ spring:
       password: qQ111111
       driver_class: org.postgresql.Driver
     default_schema: public
-    hbm2ddl.auto: validate                                      # update # validate
+    hbm2ddl.auto: update                                      # update # validate
     show_sql: true   # Показывает SQL запросы в консоли         # true   # false
     format_sql: true # Показывает SQL запросы не в одну строчку # true   # false

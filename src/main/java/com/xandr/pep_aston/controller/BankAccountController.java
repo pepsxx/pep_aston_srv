@@ -1,6 +1,7 @@
 package com.xandr.pep_aston.controller;
 
-import com.xandr.pep_aston.entity.User;
+import com.xandr.pep_aston.dto.BankAccountDto;
+import com.xandr.pep_aston.dto.UserDto;
 import com.xandr.pep_aston.service.BankAccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,18 +10,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @Slf4j
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/bank_account")
 public class BankAccountController {
     private final BankAccountService bankAccountService;
 
-    @PostMapping("/creat")
-    public boolean save(@RequestBody User user) {
-        log.info("Начало попытки создание нового счета для {}", user.getName());
-        boolean save = bankAccountService.save(user);
-        log.info("Результат попытки создание нового счета для {}: {}", user.getName(), save);
-        return save;
+    @PostMapping("/create")
+    public Optional<BankAccountDto> createBankAccount(@RequestBody UserDto userDto) {
+
+        String userName = userDto.getName();
+
+        log.info("Начало попытки создание нового счета для {}", userName);
+        Optional<BankAccountDto> maybeBankAccountDto = bankAccountService.createBankAccount(userDto);
+        if (maybeBankAccountDto.isEmpty()) {
+            log.info("Результат попытки создание нового счета для {}: Счет не создан", userName);
+        } else {
+            log.info("Результат попытки создание нового счета для {}: Создан счет № {}", userName, maybeBankAccountDto.get().getNumberAccount());
+        }
+
+        return maybeBankAccountDto;
     }
 }

@@ -7,5 +7,5 @@ import lombok.Value;
 @Builder
 public class UserDto {
     String name;
-    Integer pin;
+    Short pin;
 }

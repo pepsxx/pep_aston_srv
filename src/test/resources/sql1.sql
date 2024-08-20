@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS bank_account;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE IF NOT EXISTS users
+(
+    id   BIGSERIAL PRIMARY KEY,
+    name VARCHAR(64) NOT NULL UNIQUE,
+    pin  SMALLINT    NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS bank_account
+(
+    id       BIGSERIAL PRIMARY KEY,
+    users_id BIGINT  NOT NULL,
+    money    INTEGER NOT NULL,
+    FOREIGN KEY (users_id) REFERENCES users (id)
+);

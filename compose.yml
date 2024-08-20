@@ -1,8 +1,11 @@
 services:
   aston_db_ps:
+    container_name: PostgreSQL-40254
     image: postgres
     ports:
-      - "4011:5432"
+      - "40254:5432"
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: qQ111111
+
+#docker run --name PostgreSQL-40054 -p 40054:5432 -e  POSTGRES_USER=admin -e POSTGRES_PASSWORD=qQ111111 -d postgres

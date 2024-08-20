@@ -8,4 +8,5 @@ import lombok.Value;
 public class BankAccountDto {
     Integer money;
     String name;
+    Long numberAccount;
 }
