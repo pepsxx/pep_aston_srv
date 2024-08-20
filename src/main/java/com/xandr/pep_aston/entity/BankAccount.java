@@ -6,26 +6,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "bank_account")
+public class BankAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @Column(unique = true, nullable = false)
-    private String name;
-
     @Column(nullable = false)
-    private Integer pin;
+    private Integer money;
 
-    @OneToMany(mappedBy = "user")
-    List<BankAccount> bankAccounts = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "users_id")
+    User user;
 }

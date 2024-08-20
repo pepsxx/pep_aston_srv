@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class UserDto {
+public class BankAccountDto {
+    Integer money;
     String name;
-    Integer pin;
 }
