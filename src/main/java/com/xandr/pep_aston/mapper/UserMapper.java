@@ -2,17 +2,15 @@ package com.xandr.pep_aston.mapper;
 
 import com.xandr.pep_aston.dto.UserDto;
 import com.xandr.pep_aston.entity.User;
-import lombok.experimental.UtilityClass;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-import java.util.Optional;
+@Mapper
+public interface UserMapper {
+    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-@UtilityClass
-public class UserMapper {
-
-    public static Optional<User> mapToUser(UserDto userDto) {
-        return Optional.of(User.builder()
-                .name(userDto.getName())
-                .pin(userDto.getPin())
-                .build());
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "bankAccounts", ignore = true)
+    User userDtoToUser(UserDto userDto);
 }

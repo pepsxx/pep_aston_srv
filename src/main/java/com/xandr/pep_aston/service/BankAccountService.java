@@ -21,13 +21,14 @@ public class BankAccountService {
 
     public Optional<BankAccountDto> createBankAccount(UserDto userDto) {
 
-        return UserMapper.mapToUser(userDto)
+        return Optional.of(userDto)
+                .map(UserMapper.INSTANCE::userDtoToUser)
                 .flatMap(u -> userService.findByNameAndPin(u.getName(), u.getPin()))
                 .map(user -> BankAccount.builder()
                         .user(user)
                         .money(0)
                         .build())
                 .map(bankAccountRepository::save)
-                .flatMap(BankAccountMapper::mapToDto);
+                .map(BankAccountMapper.INSTANCE::BankAccountToBankAccountDto);
     }
 }

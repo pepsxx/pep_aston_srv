@@ -2,17 +2,20 @@ package com.xandr.pep_aston.mapper;
 
 import com.xandr.pep_aston.dto.BankAccountDto;
 import com.xandr.pep_aston.entity.BankAccount;
-import lombok.experimental.UtilityClass;
+import com.xandr.pep_aston.entity.User;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-import java.util.Optional;
+@Mapper
+public interface BankAccountMapper {
+    BankAccountMapper INSTANCE = Mappers.getMapper(BankAccountMapper.class);
 
-@UtilityClass
-public class BankAccountMapper {
-    public static Optional<BankAccountDto> mapToDto(BankAccount bankAccount) {
-        return Optional.of(BankAccountDto.builder()
-                .money(bankAccount.getMoney())
-                .name(bankAccount.getUser().getName())
-                .numberAccount(bankAccount.getId())
-                .build());
+    @Mapping(source = "id", target = "numberAccount")
+    @Mapping(source = "user", target = "name")
+    BankAccountDto BankAccountToBankAccountDto(BankAccount bankAccount);
+
+    default String map(User value) {
+        return value.getName();
     }
 }
