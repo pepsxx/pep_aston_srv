@@ -26,6 +26,7 @@ public class User {
     @Column(nullable = false)
     private Short pin;
 
+    @Builder.Default
     @OneToMany(mappedBy = "user")
     List<BankAccount> bankAccounts = new ArrayList<>();
 }
