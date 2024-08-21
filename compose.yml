@@ -7,5 +7,3 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: qQ111111
-
-#docker run --name PostgreSQL-40054 -p 40054:5432 -e  POSTGRES_USER=admin -e POSTGRES_PASSWORD=qQ111111 -d postgres

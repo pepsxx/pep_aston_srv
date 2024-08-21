@@ -3,7 +3,6 @@ package com.xandr.pep_aston.service;
 import com.xandr.pep_aston.dto.BankAccountDto;
 import com.xandr.pep_aston.dto.UserDto;
 import com.xandr.pep_aston.entity.BankAccount;
-import com.xandr.pep_aston.entity.User;
 import com.xandr.pep_aston.mapper.BankAccountMapper;
 import com.xandr.pep_aston.mapper.UserMapper;
 import com.xandr.pep_aston.repository.BankAccountRepository;
@@ -22,24 +21,13 @@ public class BankAccountService {
 
     public Optional<BankAccountDto> createBankAccount(UserDto userDto) {
 
-        Optional<User> maybeUser = UserMapper.mapToUser(userDto);
-        if (maybeUser.isEmpty()) {
-            return Optional.empty();
-        }
-        User user = maybeUser.get();
-
-        maybeUser = userService.findByNameAndPin(user.getName(), user.getPin());
-        if (maybeUser.isEmpty()) {
-            return Optional.empty();
-        }
-        user = maybeUser.get();
-
-        BankAccount newBankAccount = BankAccount.builder()
-                .user(user)
-                .money(0)
-                .build();
-        BankAccount bankAccount = bankAccountRepository.save(newBankAccount);
-
-        return BankAccountMapper.mapToDto(bankAccount);
+        return UserMapper.mapToUser(userDto)
+                .flatMap(u -> userService.findByNameAndPin(u.getName(), u.getPin()))
+                .map(user -> BankAccount.builder()
+                        .user(user)
+                        .money(0)
+                        .build())
+                .map(bankAccountRepository::save)
+                .flatMap(BankAccountMapper::mapToDto);
     }
 }

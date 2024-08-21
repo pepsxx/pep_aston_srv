@@ -10,7 +10,7 @@ import java.util.Optional;
 public class UserMapper {
 
     public static Optional<User> mapToUser(UserDto userDto) {
-        return Optional.ofNullable(User.builder()
+        return Optional.of(User.builder()
                 .name(userDto.getName())
                 .pin(userDto.getPin())
                 .build());

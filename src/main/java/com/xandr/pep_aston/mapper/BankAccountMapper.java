@@ -9,7 +9,7 @@ import java.util.Optional;
 @UtilityClass
 public class BankAccountMapper {
     public static Optional<BankAccountDto> mapToDto(BankAccount bankAccount) {
-        return Optional.ofNullable(BankAccountDto.builder()
+        return Optional.of(BankAccountDto.builder()
                 .money(bankAccount.getMoney())
                 .name(bankAccount.getUser().getName())
                 .numberAccount(bankAccount.getId())
