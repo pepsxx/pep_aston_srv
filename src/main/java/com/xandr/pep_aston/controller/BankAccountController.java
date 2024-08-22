@@ -6,6 +6,8 @@ import com.xandr.pep_aston.service.BankAccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,12 @@ public class BankAccountController {
     private final BankAccountService bankAccountService;
 
     @PostMapping("/create")
-    public ResponseEntity<BankAccountDto> createBankAccount(@RequestBody UserDto userDto) {
+    public ResponseEntity<BankAccountDto> createBankAccount(@RequestBody @Validated UserDto userDto, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            log.error("Validation errors : {}", bindingResult.getFieldErrors());
+            return ResponseEntity.badRequest().body(null);
+        }
 
         String userName = userDto.getName();
 
@@ -29,11 +36,12 @@ public class BankAccountController {
         Optional<BankAccountDto> maybeBankAccountDto = bankAccountService.createBankAccount(userDto);
 
         String message = "Результат попытки создание нового счета для";
-        String finalMessage = maybeBankAccountDto
-                .map(m -> message + " %s: Создан счет № %d".formatted(userName, maybeBankAccountDto.get().getNumberAccount()))
-                .orElse(message + " %s: Счет не создан".formatted(userName));
-        log.info(finalMessage);
+        maybeBankAccountDto.ifPresentOrElse(
+                bankAccountDto -> log.info(message + " %s: Создан счет № %d".formatted(userName, bankAccountDto.getNumberAccount())),
+                () -> log.info(message + " %s: Счет не создан".formatted(userName)));
 
-        return ResponseEntity.of(maybeBankAccountDto);
+        return maybeBankAccountDto
+                .map(r -> ResponseEntity.status(201).body(maybeBankAccountDto.get()))
+                .orElse(ResponseEntity.status(404).body(null));
     }
 }

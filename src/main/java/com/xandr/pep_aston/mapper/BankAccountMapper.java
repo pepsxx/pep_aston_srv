@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface BankAccountMapper {
-    BankAccountMapper INSTANCE = Mappers.getMapper(BankAccountMapper.class);
+    BankAccountMapper ID = Mappers.getMapper(BankAccountMapper.class);
 
     @Mapping(source = "id", target = "numberAccount")
     @Mapping(source = "user", target = "name")

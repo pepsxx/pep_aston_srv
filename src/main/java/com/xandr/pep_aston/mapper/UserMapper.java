@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface UserMapper {
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+    UserMapper ID = Mappers.getMapper(UserMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "bankAccounts", ignore = true)
