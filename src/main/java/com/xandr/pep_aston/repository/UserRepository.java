@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface UserRepository extends Repository<User, Long> {
 
-    Optional<User> findAllByNameAndPin(String name, Short pin);
+    Optional<User> findAllByNameAndPin(String name, String pin);
 }
