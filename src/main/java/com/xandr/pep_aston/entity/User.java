@@ -23,7 +23,7 @@ public class User {
     private String name;
 
     @Column(nullable = false)
-    private Short pin;
+    private String pin;
 
     @Builder.Default
     @OneToMany(mappedBy = "user")

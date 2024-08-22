@@ -3,6 +3,7 @@ package com.xandr.pep_aston.controller;
 import com.xandr.pep_aston.dto.BankAccountDto;
 import com.xandr.pep_aston.dto.UserDto;
 import com.xandr.pep_aston.service.BankAccountService;
+import com.xandr.pep_aston.util.HashCodeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
+
 
 @Slf4j
 @RestController
@@ -31,17 +33,22 @@ public class BankAccountController {
         }
 
         String userName = userDto.getName();
-
         log.info("Начало попытки создание нового счета для {}", userName);
+        userDto.setPin(HashCodeUtil.getSHA256Hash(userDto.getPin()));
+
         Optional<BankAccountDto> maybeBankAccountDto = bankAccountService.createBankAccount(userDto);
 
-        String message = "Результат попытки создание нового счета для";
         maybeBankAccountDto.ifPresentOrElse(
-                bankAccountDto -> log.info(message + " %s: Создан счет № %d".formatted(userName, bankAccountDto.getNumberAccount())),
-                () -> log.info(message + " %s: Счет не создан".formatted(userName)));
+                ba -> logFinal(userName, "Создан счет № %d".formatted(ba.getNumberAccount())),
+                () -> logFinal(userName, "Счет не создан"));
 
         return maybeBankAccountDto
                 .map(r -> ResponseEntity.status(201).body(maybeBankAccountDto.get()))
                 .orElse(ResponseEntity.status(404).body(null));
+    }
+
+    private void logFinal(String userName, String message) {
+        String massagePrefix = "Результат попытки создание нового счета для %s: ".formatted(userName);
+        log.info("{}{}", massagePrefix, message);
     }
 }
