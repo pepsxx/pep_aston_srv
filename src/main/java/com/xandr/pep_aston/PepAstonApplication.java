@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class PepAstonApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(PepAstonApplication.class, args);
         log.info("""
 
@@ -26,6 +27,6 @@ public class PepAstonApplication {
                 - $$$$          $$$$    $$$$     $$$$$$$$   $$$$$$$$  $$$$  $$$$ $$$$  $$$$ -
                 -                                              $$                           -
                 -----------------------------------------------------------------------------""");
-    }
 
+    }
 }

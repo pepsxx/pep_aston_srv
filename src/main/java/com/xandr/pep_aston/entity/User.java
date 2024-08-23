@@ -15,6 +15,7 @@ import java.util.List;
 @EqualsAndHashCode(of = "id")
 @ToString(exclude = "bankAccounts")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -28,4 +29,5 @@ public class User {
     @Builder.Default
     @OneToMany(mappedBy = "user")
     List<BankAccount> bankAccounts = new ArrayList<>();
+
 }

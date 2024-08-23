@@ -6,6 +6,7 @@ import com.xandr.pep_aston.service.BankAccountService;
 import com.xandr.pep_aston.util.HashCodeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -20,8 +21,9 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/bank_account")
+@RequestMapping("/api/v1/bank_account")
 public class BankAccountController {
+
     private final BankAccountService bankAccountService;
 
     @PostMapping("/create")
@@ -29,7 +31,7 @@ public class BankAccountController {
 
         if (bindingResult.hasErrors()) {
             log.error("Validation errors : {}", bindingResult.getFieldErrors());
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
         String userName = userDto.getName();
@@ -39,16 +41,19 @@ public class BankAccountController {
         Optional<BankAccountDto> maybeBankAccountDto = bankAccountService.createBankAccount(userDto);
 
         maybeBankAccountDto.ifPresentOrElse(
-                ba -> logFinal(userName, "Создан счет № %d".formatted(ba.getNumberAccount())),
-                () -> logFinal(userName, "Счет не создан"));
+                ba -> logPrintFinal(userName, "Создан счет № %d".formatted(ba.getNumberAccount())),
+                () -> logPrintFinal(userName, "Счет не создан"));
 
         return maybeBankAccountDto
-                .map(r -> ResponseEntity.status(201).body(maybeBankAccountDto.get()))
-                .orElse(ResponseEntity.status(404).body(null));
+                .map(ba -> ResponseEntity.status(HttpStatus.CREATED).body(ba))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+
     }
 
-    private void logFinal(String userName, String message) {
+    private void logPrintFinal(String userName, String message) {
+
         String massagePrefix = "Результат попытки создание нового счета для %s: ".formatted(userName);
         log.info("{}{}", massagePrefix, message);
+
     }
 }
