@@ -12,6 +12,7 @@ import lombok.*;
 @EqualsAndHashCode(of = "id")
 @Table(name = "bank_account")
 public class BankAccount {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -22,4 +23,5 @@ public class BankAccount {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
     User user;
+
 }

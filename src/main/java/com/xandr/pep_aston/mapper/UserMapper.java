@@ -12,4 +12,5 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "bankAccounts", ignore = true)
     User userDtoToUser(UserDto userDto);
+
 }

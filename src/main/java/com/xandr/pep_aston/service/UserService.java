@@ -15,6 +15,7 @@ public class UserService {
     public final UserRepository userRepository;
 
     public Optional<User> findByNameAndPin(String name, String pin) {
+
         return userRepository.findAllByNameAndPin(name, pin);
     }
 }

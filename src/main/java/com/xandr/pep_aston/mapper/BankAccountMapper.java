@@ -15,6 +15,8 @@ public interface BankAccountMapper {
     BankAccountDto BankAccountToBankAccountDto(BankAccount bankAccount);
 
     default String map(User value) {
+
         return value.getName();
+
     }
 }

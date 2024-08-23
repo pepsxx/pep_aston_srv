@@ -25,7 +25,7 @@ public class BankAccountService {
 
         return Optional.of(userDto)
                 .map(userMapperImpl::userDtoToUser)
-                .flatMap(u -> userService.findByNameAndPin(u.getName(), u.getPin()))
+                .flatMap(user -> userService.findByNameAndPin(user.getName(), user.getPin()))
                 .map(user -> BankAccount.builder()
                         .user(user)
                         .money(0)
