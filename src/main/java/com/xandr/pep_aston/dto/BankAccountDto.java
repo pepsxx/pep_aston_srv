@@ -1,11 +1,20 @@
 package com.xandr.pep_aston.dto;
 
-import lombok.Builder;
-import lombok.Value;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import lombok.Getter;
+import lombok.Setter;
 
-@Value
-@Builder
+@Getter
+@Setter
 public class BankAccountDto {
-    Integer money;
-    String name;
+
+    private Integer money;
+
+    @NotBlank
+    private String name;
+
+    @Positive
+    private Long numberAccount;
+
 }
