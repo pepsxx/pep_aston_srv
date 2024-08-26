@@ -8,6 +8,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,6 +29,6 @@ public class User {
 
     @Builder.Default
     @OneToMany(mappedBy = "user")
-    List<BankAccount> bankAccounts = new ArrayList<>();
+    private List<BankAccount> bankAccounts = new ArrayList<>();
 
 }

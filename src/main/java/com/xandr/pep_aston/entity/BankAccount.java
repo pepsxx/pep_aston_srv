@@ -5,6 +5,7 @@ import lombok.*;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +23,6 @@ public class BankAccount {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
-    User user;
+    private User user;
 
 }

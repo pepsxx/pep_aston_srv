@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
-
 
 @Slf4j
 @RestController
@@ -30,30 +28,23 @@ public class BankAccountController {
     public ResponseEntity<BankAccountDto> createBankAccount(@RequestBody @Validated UserDto userDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            log.error("Validation errors : {}", bindingResult.getFieldErrors());
+            log.error("Validation errors: {}", bindingResult.getFieldErrors());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
         String userName = userDto.getName();
-        log.info("Начало попытки создание нового счета для {}", userName);
+        log.info("Begin create new BankAccount for {}.", userName);
         userDto.setPin(HashCodeUtil.getSHA256Hash(userDto.getPin()));
 
-        Optional<BankAccountDto> maybeBankAccountDto = bankAccountService.createBankAccount(userDto);
-
-        maybeBankAccountDto.ifPresentOrElse(
-                ba -> logPrintFinal(userName, "Создан счет № %d".formatted(ba.getNumberAccount())),
-                () -> logPrintFinal(userName, "Счет не создан"));
-
-        return maybeBankAccountDto
-                .map(ba -> ResponseEntity.status(HttpStatus.CREATED).body(ba))
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
-
-    }
-
-    private void logPrintFinal(String userName, String message) {
-
-        String massagePrefix = "Результат попытки создание нового счета для %s: ".formatted(userName);
-        log.info("{}{}", massagePrefix, message);
+        return bankAccountService.createBankAccount(userDto)
+                .map(ba -> {
+                    log.info("The BankAccount for {} was created successfully. NumberBankAccount {}.", userName, ba.getNumberAccount());
+                    return ResponseEntity.status(HttpStatus.CREATED).body(ba);
+                })
+                .orElseGet(() -> {
+                    log.info("The BankAccount for {} do not created.", userName);
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                });
 
     }
 }

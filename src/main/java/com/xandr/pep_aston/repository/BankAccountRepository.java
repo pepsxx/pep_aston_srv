@@ -1,10 +1,6 @@
 package com.xandr.pep_aston.repository;
 
 import com.xandr.pep_aston.entity.BankAccount;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BankAccountRepository extends Repository<BankAccount, Long> {
-
-    BankAccount save(BankAccount bankAccount);
-
-}
+public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {}
