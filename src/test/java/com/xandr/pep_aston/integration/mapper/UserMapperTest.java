@@ -2,9 +2,10 @@ package com.xandr.pep_aston.integration.mapper;
 
 import com.xandr.pep_aston.dto.UserDto;
 import com.xandr.pep_aston.entity.User;
-import com.xandr.pep_aston.integration.annotation.IT;
+import com.xandr.pep_aston.integration.IntegrationTestBase;
 import com.xandr.pep_aston.mapper.UserMapper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
@@ -12,9 +13,8 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@IT
-@AllArgsConstructor
-class UserMapperTestCase {
+@RequiredArgsConstructor
+class UserMapperTest extends IntegrationTestBase {
 
     private final UserMapper userMapper;
 
@@ -23,6 +23,7 @@ class UserMapperTestCase {
     private static final String PIN = "wfMw0K/zHByHQD8eQ0e8whr/fBeZCHI1NfKzFyNwJSU=";
 
     @Test
+    @DisplayName("Фактический результат Null, если аргумент Null")
     void actualResultNullIfArgIsNull() {
 
         String message = "user should null after mapper if userDao is null";
@@ -31,6 +32,7 @@ class UserMapperTestCase {
     }
 
     @Test
+    @DisplayName("Фактический результат присутствует, если аргумент не NotNull")
     void actualResultPresentIfArgIsNotNull() {
 
         String message = "user should not be null after mapper if userDao is not null";
@@ -39,6 +41,7 @@ class UserMapperTestCase {
     }
 
     @Test
+    @DisplayName("Фактический результат равен ожидаемому результату")
     @Timeout(value = 100, unit = TimeUnit.MILLISECONDS)
     void actualResultEqualsExpectedResult() {
 

@@ -3,10 +3,11 @@ package com.xandr.pep_aston.integration.mapper;
 import com.xandr.pep_aston.dto.BankAccountDto;
 import com.xandr.pep_aston.entity.BankAccount;
 import com.xandr.pep_aston.entity.User;
-import com.xandr.pep_aston.integration.annotation.IT;
+import com.xandr.pep_aston.integration.IntegrationTestBase;
 import com.xandr.pep_aston.mapper.BankAccountMapper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
@@ -14,9 +15,8 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@IT
-@AllArgsConstructor
-class BankAccountMapperTestCase {
+@RequiredArgsConstructor
+class BankAccountMapperTest extends IntegrationTestBase {
 
     private final BankAccountMapper bankAccountMapper;
 
@@ -33,6 +33,7 @@ class BankAccountMapperTestCase {
     }
 
     @Test
+    @DisplayName("Фактический результат Null, если аргумент Null")
     void actualResultNullIfArgIsNull() {
 
         String message = "bankAccountDto should null after mapper if bankAccount is null";
@@ -41,6 +42,7 @@ class BankAccountMapperTestCase {
     }
 
     @Test
+    @DisplayName("Фактический результат присутствует, если аргумент не NotNull")
     void actualResultPresentIfArgIsNotNull() {
 
         String message = "bankAccountDto should not null after mapper if bankAccount is not null";
@@ -49,6 +51,7 @@ class BankAccountMapperTestCase {
     }
 
     @Test
+    @DisplayName("Фактический результат равен ожидаемому результату")
     @Timeout(value = 100, unit = TimeUnit.MILLISECONDS)
     void actualResultEqualsExpectedResult() {
 

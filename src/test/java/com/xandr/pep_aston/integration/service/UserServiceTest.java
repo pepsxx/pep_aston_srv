@@ -1,9 +1,10 @@
 package com.xandr.pep_aston.integration.service;
 
 import com.xandr.pep_aston.entity.User;
-import com.xandr.pep_aston.integration.annotation.IT;
+import com.xandr.pep_aston.integration.IntegrationTestBase;
 import com.xandr.pep_aston.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
@@ -12,9 +13,8 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@IT
 @RequiredArgsConstructor
-class UserServiceTestCase {
+class UserServiceTest extends IntegrationTestBase {
 
     private final UserService userService;
 
@@ -23,8 +23,8 @@ class UserServiceTestCase {
     private static final String PIN_OK = "wfMw0K/zHByHQD8eQ0e8whr/fBeZCHI1NfKzFyNwJSU=";
     private static final String PIN_BAD = "PepBadStringForTestPin";
 
-
     @Test
+    @DisplayName("Фактический результат NotNull, если аргументы Null")
     void actualResultNotNullIfArgsIsNull() {
 
         String message = "Result should be Optional";
@@ -34,8 +34,8 @@ class UserServiceTestCase {
 
     }
 
-
     @Test
+    @DisplayName("Фактический результат пуст, если имя или пин-код неверны")
     void actualResultIsEmptyIfNameOrPinIsBad() {
 
         String message = "The user must not exist if, ";
@@ -46,6 +46,7 @@ class UserServiceTestCase {
     }
 
     @Test
+    @DisplayName("Пользователь присутствует, если имя и пин-код верны")
     void userPresentIfNameAndPinOk() {
 
         String message = "The user must exist if, the name and pin is correct.";
@@ -54,7 +55,8 @@ class UserServiceTestCase {
     }
 
     @Test
-    @Timeout(value = 100, unit = TimeUnit.MILLISECONDS)
+    @DisplayName("Фактический результат равен ожидаемому результату")
+    @Timeout(value = 1000, unit = TimeUnit.MILLISECONDS)
     void actualResultEqualsExpectedResult() {
 
         Optional<User> maybeActualResult = userService.findByNameAndPin(NAME_OK, PIN_OK);

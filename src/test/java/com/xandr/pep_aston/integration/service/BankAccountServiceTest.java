@@ -2,18 +2,18 @@ package com.xandr.pep_aston.integration.service;
 
 import com.xandr.pep_aston.dto.BankAccountDto;
 import com.xandr.pep_aston.dto.UserDto;
-import com.xandr.pep_aston.integration.annotation.IT;
+import com.xandr.pep_aston.integration.IntegrationTestBase;
 import com.xandr.pep_aston.service.BankAccountService;
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@IT
 @RequiredArgsConstructor
-class BankAccountServiceTestCase {
+class BankAccountServiceTest extends IntegrationTestBase {
 
     private final BankAccountService bankAccountService;
 
@@ -24,6 +24,7 @@ class BankAccountServiceTestCase {
     private static final UserDto userDto = new UserDto();
 
     @Test
+    @DisplayName("Фактический результат NotNull, если аргументы Null")
     void actualResultNotNullIfArgsIsNull() {
 
         String message = "Result should be Optional";
@@ -32,6 +33,7 @@ class BankAccountServiceTestCase {
     }
 
     @Test
+    @DisplayName("Фактический результат пуст, если имя или пин-код неверны")
     void actualResultIsEmptyIfNameOrPinIsBad() {
 
         String message = "The bankAccountDto must not exist if, ";
@@ -51,6 +53,7 @@ class BankAccountServiceTestCase {
     }
 
     @Test
+    @DisplayName("bankAccountDto существует, если имя или пин-код верны")
     void bankAccountDtoPresentIfNameOrPinIsOk() {
 
         String message = "The bankAccountDto must exist if, the name and pin is correct.";
@@ -62,7 +65,8 @@ class BankAccountServiceTestCase {
     }
 
     @Test
-    void moneyEqualsZeroIfBankAccountCreate() {
+    @DisplayName("Стартовый баланс равен нулю, если банковский счет создан")
+    void moneyEqualsZeroIfBankAccountCreat() {
 
         userDto.setPin(PIN_OK);
         userDto.setName(NAME_OK);
@@ -76,6 +80,7 @@ class BankAccountServiceTestCase {
     }
 
     @Test
+    @DisplayName("Фактический результат равен ожидаемому результату")
     void actualResultEqualsExpectedResult() {
 
         userDto.setPin(PIN_OK);
