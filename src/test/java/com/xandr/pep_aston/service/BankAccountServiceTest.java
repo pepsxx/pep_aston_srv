@@ -7,6 +7,7 @@ import com.xandr.pep_aston.entity.User;
 import com.xandr.pep_aston.mapper.BankAccountMapper;
 import com.xandr.pep_aston.mapper.UserMapper;
 import com.xandr.pep_aston.repository.BankAccountRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BankAccountServiceTest {
@@ -45,6 +47,7 @@ class BankAccountServiceTest {
     private static final BankAccountDto bankAccountDto = new BankAccountDto();
 
     @Test
+    @DisplayName("Создание банковского счета")
     @Timeout(value = 100, unit = TimeUnit.MILLISECONDS)
     void createBankAccount() {
 
@@ -60,13 +63,13 @@ class BankAccountServiceTest {
         bankAccountDto.setName(NAME);
         bankAccountDto.setMoney(START_BALANCE);
 
-        Mockito.doReturn(user).when(userMapper).userDtoToUser(userDto);
-        Mockito.doReturn(bankAccount).when(bankAccountRepository).save(bankAccount);
-        Mockito.doReturn(Optional.of(user)).when(userService).findByNameAndPin(NAME, PIN);
-        Mockito.doReturn(bankAccountDto).when(bankAccountMapper).BankAccountToBankAccountDto(bankAccount);
+        doReturn(user).when(userMapper).userDtoToUser(userDto);
+        doReturn(bankAccount).when(bankAccountRepository).save(bankAccount);
+        doReturn(Optional.of(user)).when(userService).findByNameAndPin(NAME, PIN);
+        doReturn(bankAccountDto).when(bankAccountMapper).BankAccountToBankAccountDto(bankAccount);
 
         Optional<BankAccountDto> maybeActualResult = bankAccountService.createBankAccount(userDto);
-        Mockito.verify(bankAccountRepository).save(argumentCaptor.capture());
+        verify(bankAccountRepository).save(argumentCaptor.capture());
 
         assertEquals(START_BALANCE, argumentCaptor.getValue().getMoney(), "Star balance should match 0");
 

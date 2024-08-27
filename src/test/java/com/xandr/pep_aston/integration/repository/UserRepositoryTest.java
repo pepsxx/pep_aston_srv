@@ -1,9 +1,10 @@
 package com.xandr.pep_aston.integration.repository;
 
 import com.xandr.pep_aston.entity.User;
-import com.xandr.pep_aston.integration.annotation.IT;
+import com.xandr.pep_aston.integration.IntegrationTestBase;
 import com.xandr.pep_aston.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
@@ -12,9 +13,8 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@IT
 @RequiredArgsConstructor
-class UserRepositoryTestCase {
+class UserRepositoryTest extends IntegrationTestBase {
 
     private final UserRepository userRepository;
 
@@ -25,6 +25,7 @@ class UserRepositoryTestCase {
 
 
     @Test
+    @DisplayName("Фактический результат NotNull, если аргумент(ы) Null")
     void actualResultNotNullIfArgsIsNull() {
 
         String message = "Result should be Optional";
@@ -35,6 +36,7 @@ class UserRepositoryTestCase {
     }
 
     @Test
+    @DisplayName("Фактический результат пуст, если имя или пин-код неверны")
     void actualResultIsEmptyIfNameOrPinIsBad() {
 
         String message = "The user must not exist if, ";
@@ -45,6 +47,7 @@ class UserRepositoryTestCase {
     }
 
     @Test
+    @DisplayName("Пользователь присутствует, если имя или пин-код верны")
     void userPresentIfNameOrPinIsOk() {
 
         String message = "The user must exist if, the name and pin is correct.";
@@ -53,6 +56,7 @@ class UserRepositoryTestCase {
     }
 
     @Test
+    @DisplayName("Фактический результат равен ожидаемому результату")
     @Timeout(value = 1000, unit = TimeUnit.MILLISECONDS)
     void actualResultEqualsExpectedResult() {
 

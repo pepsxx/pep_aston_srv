@@ -1,4 +1,8 @@
 spring:
+
   datasource:
-    driver-class-name: org.postgresql.Driver        # Без этого не запускались ITTest
-    url: jdbc:postgresql://localhost:40254/postgres # Без этого не запускались ITTest
+    username: test
+    password: test
+
+  jpa.properties.hibernate:
+    hbm2ddl.auto: update

@@ -2,11 +2,12 @@ package com.xandr.pep_aston.integration.repository;
 
 import com.xandr.pep_aston.entity.BankAccount;
 import com.xandr.pep_aston.entity.User;
-import com.xandr.pep_aston.integration.annotation.IT;
+import com.xandr.pep_aston.integration.IntegrationTestBase;
 import com.xandr.pep_aston.repository.BankAccountRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
@@ -14,9 +15,8 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@IT
-@AllArgsConstructor
-class BankAccountRepositoryTestCase {
+@RequiredArgsConstructor
+class BankAccountRepositoryTest extends IntegrationTestBase {
 
     private final BankAccountRepository bankAccountRepository;
 
@@ -33,7 +33,8 @@ class BankAccountRepositoryTestCase {
     }
 
     @Test
-    void ThrowsIfBankAccountIsNull() {
+    @DisplayName("Исключение, если BankAccount Null")
+    void ExceptionIfBankAccountIsNull() {
 
         String message = "Should be exception if bankAccount is null";
         assertThrows(Throwable.class, () -> bankAccountRepository.save(null), message);
@@ -41,7 +42,8 @@ class BankAccountRepositoryTestCase {
     }
 
     @Test
-    void ThrowsIfUserIsNull() {
+    @DisplayName("Исключение, если пользователь Null")
+    void ExceptionIfUserIsNull() {
 
         bankAccount.setUser(null);
 
@@ -51,7 +53,8 @@ class BankAccountRepositoryTestCase {
     }
 
     @Test
-    void ThrowsIfMoneyIsNull() {
+    @DisplayName("Исключение, если Money Null")
+    void ExceptionIfMoneyIsNull() {
 
         bankAccount.setMoney(null);
 
@@ -61,6 +64,7 @@ class BankAccountRepositoryTestCase {
     }
 
     @Test
+    @DisplayName("Фактический результат присутствует, если аргумент NotNull")
     void actualResultPresentIfArgIsNotNull() {
 
         String message = "BankAccount should not null after if critical arguments is not null";
@@ -70,6 +74,7 @@ class BankAccountRepositoryTestCase {
 
     @Test
     @Transactional
+    @DisplayName("Фактический результат равен ожидаемому результату")
     @Timeout(value = 100, unit = TimeUnit.MILLISECONDS)
     void actualResultEqualsExpectedResult() {
 
