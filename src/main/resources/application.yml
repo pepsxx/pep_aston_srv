@@ -6,7 +6,6 @@ spring:
   application:
     name: pep_aston
 
-
   datasource:
     url: jdbc:postgresql://localhost:40254/postgres
     username: admin
