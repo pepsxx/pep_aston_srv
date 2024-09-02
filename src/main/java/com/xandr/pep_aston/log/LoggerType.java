@@ -1,8 +1,10 @@
 package com.xandr.pep_aston.log;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public enum LoggerType {
     BEGIN("Start"),
     END("Finish"),
@@ -14,7 +16,4 @@ public enum LoggerType {
 
     private final String description;
 
-    LoggerType(String description) {
-        this.description = description;
-    }
 }

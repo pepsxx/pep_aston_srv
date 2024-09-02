@@ -30,7 +30,9 @@ public class AspectFirst {
     @Before("createBankAccount() && args(userDto)")
     private void before(JoinPoint joinPoint, UserDto userDto) {
 
-        setLogg(NONE, joinPoint.getTarget().getClass().getSimpleName(), "Begin create new BankAccount for %s".formatted(userDto.getName()));
+        if (userDto != null) {
+            setLogg(NONE, joinPoint.getTarget().getClass().getSimpleName(), "Begin create new BankAccount for %s".formatted(userDto.getName()));
+        }
 
     }
 
