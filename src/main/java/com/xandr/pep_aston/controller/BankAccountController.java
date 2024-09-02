@@ -1,6 +1,7 @@
 package com.xandr.pep_aston.controller;
 
 import com.xandr.pep_aston.dto.BankAccountDto;
+import com.xandr.pep_aston.dto.TransferDto;
 import com.xandr.pep_aston.dto.UserDto;
 import com.xandr.pep_aston.service.BankAccountService;
 import com.xandr.pep_aston.util.HashCodeUtil;
@@ -27,8 +28,7 @@ public class BankAccountController {
     @PostMapping("/create")
     public ResponseEntity<BankAccountDto> createBankAccount(@RequestBody @Validated UserDto userDto, BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()) {
-            log.error("Validation errors: {}", bindingResult.getFieldErrors());
+        if (isNotValid(bindingResult)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
@@ -45,6 +45,32 @@ public class BankAccountController {
                     log.info("The BankAccount for {} do not created.", userName);
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
                 });
+
+    }
+
+    @PostMapping("/transfer")
+    public ResponseEntity<BankAccountDto> transferMoney(@RequestBody @Validated TransferDto transferDto, BindingResult bindingResult) {
+
+        if (isNotValid(bindingResult)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        transferDto.setPin(HashCodeUtil.getSHA256Hash(transferDto.getPin()));
+
+        return bankAccountService.transferMoney(transferDto)
+                .map(ba -> ResponseEntity.status(HttpStatus.OK).body(ba))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
+
+    private static boolean isNotValid(BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            log.error("Validation errors: {}", bindingResult.getFieldErrors());
+            return true;
+        } else {
+            log.info("Validation successful");
+            return false;
+        }
 
     }
 }

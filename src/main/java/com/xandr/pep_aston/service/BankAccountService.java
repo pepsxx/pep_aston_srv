@@ -1,8 +1,10 @@
 package com.xandr.pep_aston.service;
 
 import com.xandr.pep_aston.dto.BankAccountDto;
+import com.xandr.pep_aston.dto.TransferDto;
 import com.xandr.pep_aston.dto.UserDto;
 import com.xandr.pep_aston.entity.BankAccount;
+import com.xandr.pep_aston.entity.User;
 import com.xandr.pep_aston.mapper.BankAccountMapper;
 import com.xandr.pep_aston.mapper.UserMapper;
 import com.xandr.pep_aston.repository.BankAccountRepository;
@@ -10,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -33,5 +37,62 @@ public class BankAccountService {
                         .build())
                 .map(bankAccountRepository::save)
                 .map(bankAccountMapper::BankAccountToBankAccountDto);
+
+    }
+
+    public Optional<BankAccountDto> transferMoney(TransferDto transferDto) {
+
+        // Проверка авторизации
+        Optional<User> maybeUser = userService.findByNameAndPin(transferDto.getName(), transferDto.getPin());
+        if (maybeUser.isEmpty()) {
+            log.warn("Пароль или имя пользователя не совпадают.");
+            return Optional.empty();
+        }
+
+        // Проверка существует ли BankAccountFrom
+        Optional<BankAccount> maybeBankAccountFrom = bankAccountRepository.findById(transferDto.getNumberAccountFrom());
+        if (maybeBankAccountFrom.isEmpty()) {
+            log.warn("не существует счет BankAccountFrom.");
+            return Optional.empty();
+        }
+
+        // Проверка существует ли BankAccountTo
+        Optional<BankAccount> maybeBankAccountTo = bankAccountRepository.findById(transferDto.getNumberAccountTo());
+        if (maybeBankAccountTo.isEmpty()) {
+            log.warn("не существует счет BankAccountTo.");
+            return Optional.empty();
+        }
+
+        // Проверка принадлежит ли bankAccount to user
+        User user = maybeUser.get();
+        BankAccount bankAccountFrom = maybeBankAccountFrom.get();
+        if (!user.equals(bankAccountFrom.getUser())) {
+            log.warn("Пользователю не принадлежит счет BankAccountFrom.");
+            return Optional.empty();
+        }
+
+        // Проверка достаточности средств для перевода
+        if (bankAccountFrom.getMoney() < transferDto.getMoney()) {
+            log.warn("Не достаточно средств на счете BankAccountFrom.");
+            return Optional.empty();
+        }
+
+        // Перевод средств
+        try {
+            BankAccount bankAccountTo = maybeBankAccountTo.get();
+            List<BankAccount> bankAccounts = new ArrayList<>();
+            bankAccounts.add(bankAccountTo);
+            bankAccounts.add(bankAccountFrom);
+            bankAccountTo.setMoney(bankAccountTo.getMoney() + transferDto.getMoney());
+            bankAccountFrom.setMoney(bankAccountFrom.getMoney() - transferDto.getMoney());
+            bankAccountRepository.saveAllAndFlush(bankAccounts);
+        } catch (RuntimeException e) {
+            log.error(e.getLocalizedMessage());
+            return Optional.empty();
+        }
+
+        return Optional.of(bankAccountFrom)
+                .map(bankAccountMapper::BankAccountToBankAccountDto);
+
     }
 }
