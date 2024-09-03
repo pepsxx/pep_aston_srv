@@ -11,9 +11,8 @@ import com.xandr.pep_aston.repository.BankAccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -40,6 +39,7 @@ public class BankAccountService {
 
     }
 
+    @Transactional
     public Optional<BankAccountDto> transferMoney(TransferDto transferDto) {
 
         // Проверка авторизации
@@ -78,21 +78,24 @@ public class BankAccountService {
         }
 
         // Перевод средств
-        try {
-            BankAccount bankAccountTo = maybeBankAccountTo.get();
-            List<BankAccount> bankAccounts = new ArrayList<>();
-            bankAccounts.add(bankAccountTo);
-            bankAccounts.add(bankAccountFrom);
-            bankAccountTo.setMoney(bankAccountTo.getMoney() + transferDto.getMoney());
-            bankAccountFrom.setMoney(bankAccountFrom.getMoney() - transferDto.getMoney());
-            bankAccountRepository.saveAllAndFlush(bankAccounts);
-        } catch (RuntimeException e) {
-            log.error(e.getLocalizedMessage());
-            return Optional.empty();
-        }
+        BankAccount bankAccountTo = maybeBankAccountTo.get();
+        this.transfer(transferDto, bankAccountTo, bankAccountFrom);
 
         return Optional.of(bankAccountFrom)
                 .map(bankAccountMapper::BankAccountToBankAccountDto);
 
     }
+
+    @Transactional
+    protected void transfer(TransferDto transferDto, BankAccount bankAccountTo, BankAccount bankAccountFrom) {
+        try {
+            bankAccountTo.setMoney(bankAccountTo.getMoney() + transferDto.getMoney());
+            bankAccountFrom.setMoney(bankAccountFrom.getMoney() - transferDto.getMoney());
+            bankAccountRepository.save(bankAccountTo);
+            bankAccountRepository.save(bankAccountFrom);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

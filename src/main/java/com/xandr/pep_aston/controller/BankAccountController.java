@@ -51,7 +51,7 @@ public class BankAccountController {
     @PostMapping("/transfer")
     public ResponseEntity<BankAccountDto> transferMoney(@RequestBody @Validated TransferDto transferDto, BindingResult bindingResult) {
 
-        if (isNotValid(bindingResult)) {
+        if (this.isNotValid(bindingResult)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
@@ -62,7 +62,7 @@ public class BankAccountController {
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
 
-    private static boolean isNotValid(BindingResult bindingResult) {
+    private boolean isNotValid(BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             log.error("Validation errors: {}", bindingResult.getFieldErrors());
