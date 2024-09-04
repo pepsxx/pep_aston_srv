@@ -6,10 +6,13 @@ import com.xandr.pep_aston.entity.BankAccount;
 import com.xandr.pep_aston.mapper.BankAccountMapper;
 import com.xandr.pep_aston.mapper.UserMapper;
 import com.xandr.pep_aston.repository.BankAccountRepository;
+import com.xandr.pep_aston.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -21,6 +24,7 @@ public class BankAccountService {
     private final UserMapper userMapper;
     private final BankAccountMapper bankAccountMapper;
     private final int START_BALANCE = 0;
+    private final UserRepository userRepository;
 
     public Optional<BankAccountDto> createBankAccount(UserDto userDto) {
 
@@ -33,5 +37,23 @@ public class BankAccountService {
                         .build())
                 .map(bankAccountRepository::save)
                 .map(bankAccountMapper::BankAccountToBankAccountDto);
+    }
+
+    public Optional<List<BankAccountDto>> report() {
+
+        List<BankAccount> listBankAccount = bankAccountRepository.findAll();
+        if (listBankAccount.isEmpty()) {
+            return Optional.empty();
+        }
+
+        List<Long> listIdUser = new ArrayList<>();
+        listBankAccount.forEach(ba -> listIdUser.add(ba.getUser().getId()));
+        userRepository.findAllById(listIdUser);
+
+        List<BankAccountDto> listBankAccountDto = new ArrayList<>();
+        listBankAccount.forEach(ba -> listBankAccountDto.add(bankAccountMapper.BankAccountAndUserToBankAccountDto(ba, ba.getUser())));
+
+        return Optional.of(listBankAccountDto);
+
     }
 }
