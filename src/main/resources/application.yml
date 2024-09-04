@@ -21,5 +21,5 @@ spring:
       driver_class: ${spring.datasource.driver-class-name}
     default_schema: public
     hbm2ddl.auto: update                                        # update # validate
-    show_sql: false   # Показывает SQL запросы в консоли         # true   # false
-    format_sql: false # Показывает SQL запросы не в одну строчку # true   # false
+    show_sql: true   # Показывает SQL запросы в консоли         # true   # false
+    format_sql: true # Показывает SQL запросы не в одну строчку # true   # false

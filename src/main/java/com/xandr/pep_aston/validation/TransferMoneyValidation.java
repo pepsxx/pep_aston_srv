@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -19,39 +21,48 @@ public class TransferMoneyValidation {
     private final UserService userService;
     private final BankAccountRepository bankAccountRepository;
 
-    public boolean isValid(TransferDto transferDto) {
+    public Map<String, Object> isValid(TransferDto transferDto) {
+
+        Map<String, Object> validMapObject = new HashMap<>();
 
         Optional<User> maybeUser = userService.findByNameAndPin(transferDto.getName(), transferDto.getPin());
         if (maybeUser.isEmpty()) {
             log.warn("Пароль или имя пользователя не совпадают.");
-            return false;
+            return new HashMap<>();
         }
+        validMapObject.put("user", maybeUser.get());
+
         Optional<BankAccount> maybeBankAccountFrom = bankAccountRepository.findById(transferDto.getNumberAccountFrom());
         if (maybeBankAccountFrom.isEmpty()) {
             log.warn("не существует счет BankAccountFrom.");
-            return false;
+            return new HashMap<>();
         }
-        if (bankAccountRepository.findById(transferDto.getNumberAccountTo()).isEmpty()) {
+        validMapObject.put("bankAccountFrom", maybeBankAccountFrom.get());
+
+        Optional<BankAccount> maybeBankAccountTo = bankAccountRepository.findById(transferDto.getNumberAccountTo());
+        if (maybeBankAccountTo.isEmpty()) {
             log.warn("не существует счет BankAccountTo.");
-            return false;
+            return new HashMap<>();
         }
+        validMapObject.put("bankAccountTo", maybeBankAccountTo.get());
 
         User user = maybeUser.get();
         BankAccount bankAccountFrom = maybeBankAccountFrom.get();
 
         if (!user.equals(bankAccountFrom.getUser())) {
             log.warn("Пользователю не принадлежит счет BankAccountFrom.");
-            return false;
+            return new HashMap<>();
         }
         if (transferDto.getMoney() > bankAccountFrom.getMoney()) {
             log.warn("Не достаточно средств на счете BankAccountFrom.");
-            return false;
+            return new HashMap<>();
         }
         if (transferDto.getMoney() < 0) {
             log.warn("Сумма для перевода должна быть положительной");
-            return false;
+            return new HashMap<>();
         }
-        return true;
+
+        return validMapObject;
 
     }
 }

@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -45,15 +46,16 @@ public class BankAccountService {
     @Transactional
     public Optional<BankAccountDto> transferMoney(TransferDto transferDto) {
 
-        if (!transferMoneyValidation.isValid(transferDto)) {
+        Map<String, Object> validMapObject = transferMoneyValidation.isValid(transferDto);
+        if (validMapObject.isEmpty()) {
             return Optional.empty();
         }
 
-        User user = userService.findByNameAndPin(transferDto.getName(), transferDto.getPin()).get();
-        BankAccount bankAccountTo = bankAccountRepository.findById(transferDto.getNumberAccountTo()).get();
-        BankAccount bankAccountFrom = bankAccountRepository.findById(transferDto.getNumberAccountFrom()).get();
-
-        return transactionMoneyService.transactionMoney(transferDto, user, bankAccountTo, bankAccountFrom);
+        return transactionMoneyService.transactionMoney(
+                transferDto,
+                (User) validMapObject.get("user"),
+                (BankAccount) validMapObject.get("bankAccountTo"),
+                (BankAccount) validMapObject.get("bankAccountFrom"));
 
     }
 
