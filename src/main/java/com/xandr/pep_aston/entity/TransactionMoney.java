@@ -3,6 +3,7 @@ package com.xandr.pep_aston.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,7 +31,7 @@ public class TransactionMoney {
     private BankAccount bankAccountFrom;
 
     @Column(nullable = false)
-    private Integer money;
+    private BigDecimal money;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bank_account_to_id")

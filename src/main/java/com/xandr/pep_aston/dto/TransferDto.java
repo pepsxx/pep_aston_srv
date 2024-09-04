@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
 @Setter
 @Getter
 @ToString
@@ -20,7 +22,7 @@ public class TransferDto {
 
     @NotNull
     @Positive
-    private Integer money;
+    private BigDecimal money;
 
     @NotNull
     @Positive

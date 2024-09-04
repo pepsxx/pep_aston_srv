@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class BankAccountService {
     private final BankAccountRepository bankAccountRepository;
     private final TransferMoneyValidation transferMoneyValidation;
     private final TransactionMoneyService transactionMoneyService;
-    private final int START_BALANCE = 0;
+    private final BigDecimal START_BALANCE = BigDecimal.valueOf(0);
 
     public Optional<BankAccountDto> createBankAccount(UserDto userDto) {
 
@@ -52,7 +53,7 @@ public class BankAccountService {
         }
 
         return transactionMoneyService.transactionMoney(
-                transferDto,
+                transferDto.getMoney(),
                 (User) validMapObject.get("user"),
                 (BankAccount) validMapObject.get("bankAccountTo"),
                 (BankAccount) validMapObject.get("bankAccountFrom"));

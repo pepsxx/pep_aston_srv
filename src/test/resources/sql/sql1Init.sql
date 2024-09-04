@@ -12,19 +12,19 @@ CREATE TABLE IF NOT EXISTS users
 CREATE TABLE IF NOT EXISTS bank_account
 (
     id       BIGSERIAL PRIMARY KEY,
-    users_id BIGINT  NOT NULL,
-    money    INTEGER NOT NULL,
+    users_id BIGINT         NOT NULL,
+    money    NUMERIC(38, 2) NOT NULL,
     FOREIGN KEY (users_id) REFERENCES users (id)
 );
 
 CREATE TABLE IF NOT EXISTS transaction_money
 (
     id                   BIGSERIAL PRIMARY KEY,
-    local_date_time      TIMESTAMP NOT NULL,
-    users_id             BIGINT    NOT NULL,
-    money                INTEGER   NOT NULL,
-    bank_account_from_id BIGINT    NOT NULL,
-    bank_account_to_id   BIGINT    NOT NULL,
+    local_date_time      TIMESTAMP      NOT NULL,
+    users_id             BIGINT         NOT NULL,
+    money                NUMERIC(38, 2) NOT NULL,
+    bank_account_from_id BIGINT         NOT NULL,
+    bank_account_to_id   BIGINT         NOT NULL,
     FOREIGN KEY (users_id) REFERENCES users (id),
     FOREIGN KEY (bank_account_from_id) REFERENCES bank_account (id),
     FOREIGN KEY (bank_account_to_id) REFERENCES bank_account (id)

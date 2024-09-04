@@ -5,11 +5,13 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 public class BankAccountDto {
 
-    private Integer money;
+    private BigDecimal money;
 
     @NotBlank
     private String name;

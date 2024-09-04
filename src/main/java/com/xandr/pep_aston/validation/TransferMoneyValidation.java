@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -53,11 +54,11 @@ public class TransferMoneyValidation {
             log.warn("Пользователю не принадлежит счет BankAccountFrom.");
             return new HashMap<>();
         }
-        if (transferDto.getMoney() > bankAccountFrom.getMoney()) {
+        if (transferDto.getMoney().compareTo(bankAccountFrom.getMoney()) > 0) {
             log.warn("Не достаточно средств на счете BankAccountFrom.");
             return new HashMap<>();
         }
-        if (transferDto.getMoney() < 0) {
+        if (transferDto.getMoney().compareTo(BigDecimal.ZERO) <= 0) {
             log.warn("Сумма для перевода должна быть положительной");
             return new HashMap<>();
         }
