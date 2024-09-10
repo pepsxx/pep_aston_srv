@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -38,7 +39,7 @@ class BankAccountServiceTest {
     @InjectMocks
     private static BankAccountService bankAccountService;
 
-    private static final Integer START_BALANCE = 0;
+    private static final BigDecimal START_BALANCE = BigDecimal.ZERO;
     private static final String PIN = "TestPin";
     private static final String NAME = "TestName";
     private static final User user = new User();

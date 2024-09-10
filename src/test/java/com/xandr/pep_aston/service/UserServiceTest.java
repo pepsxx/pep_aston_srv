@@ -2,6 +2,7 @@ package com.xandr.pep_aston.service;
 
 import com.xandr.pep_aston.entity.User;
 import com.xandr.pep_aston.repository.UserRepository;
+import com.xandr.pep_aston.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -24,7 +25,7 @@ class UserServiceTest {
     private static UserRepository userRepository;
 
     @InjectMocks
-    private static UserService userService;
+    private static UserServiceImpl userService;
 
     private static final String NAME = "PepBadStringForTestName";
     private static final String PIN = "PepBadStringForTestPin";

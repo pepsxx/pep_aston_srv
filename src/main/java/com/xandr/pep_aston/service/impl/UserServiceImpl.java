@@ -7,10 +7,12 @@ import com.xandr.pep_aston.repository.UserRepository;
 import com.xandr.pep_aston.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     public final UserRepository userRepository;
