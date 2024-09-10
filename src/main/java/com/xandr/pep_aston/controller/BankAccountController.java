@@ -28,7 +28,7 @@ public class BankAccountController {
 
         if (bindingResult.hasErrors()) {
             log.error("Validation errors: {}", bindingResult.getFieldErrors());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.badRequest().build();
         }
 
         String userName = userDto.getName();
