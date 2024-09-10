@@ -27,7 +27,7 @@ public class UserController {
 
         if (bindingResult.hasErrors()) {
             log.error("Validation errors: {}", bindingResult.getFieldErrors());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.badRequest().build();
         }
 
         userDto.setPin(HashCodeUtil.getSHA256Hash(userDto.getPin()));
