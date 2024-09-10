@@ -38,7 +38,7 @@ public class BankAccountController {
 
         return bankAccountService.createBankAccount(userDto)
                 .map(ba -> ResponseEntity.status(HttpStatus.CREATED).body(ba))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+                .orElseGet(() -> ResponseEntity.notFound().build());
 
     }
 }
