@@ -13,4 +13,6 @@ public interface UserMapper {
     @Mapping(target = "bankAccounts", ignore = true)
     User userDtoToUser(UserDto userDto);
 
+    @Mapping(target = "pin", ignore = true)
+    UserDto userToUserDto(User user);
 }
