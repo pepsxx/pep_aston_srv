@@ -29,7 +29,7 @@ public class BankAccountController {
     public ResponseEntity<BankAccountDto> createBankAccount(@RequestBody @Validated UserDto userDto, BindingResult bindingResult) {
 
         if (isNotValid(bindingResult)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.badRequest().build();
         }
 
         String userName = userDto.getName();
@@ -59,7 +59,7 @@ public class BankAccountController {
 
         return bankAccountService.transferMoney(transferDto)
                 .map(ba -> ResponseEntity.status(HttpStatus.OK).body(ba))
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+                .orElse(ResponseEntity.badRequest().build());
     }
 
     private boolean isNotValid(BindingResult bindingResult) {
