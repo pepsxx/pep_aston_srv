@@ -34,7 +34,6 @@ public class PepAstonApplication {
 
         // Это временно - Начало
         ConfigurableEnvironment environment = context.getEnvironment();
-
         environment.getPropertySources().stream()
                 .filter(i -> i.getClass().getSimpleName().contains("Map"))
                 .map(PropertySource::getSource)

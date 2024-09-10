@@ -1,21 +1,20 @@
 package com.xandr.pep_aston.service;
 
+import com.xandr.pep_aston.dto.UserDto;
 import com.xandr.pep_aston.entity.User;
-import com.xandr.pep_aston.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
-@Slf4j
+/** Сервис по работе с пользователями
+ */
 @Service
-@RequiredArgsConstructor
-public class UserService {
-    public final UserRepository userRepository;
+public interface UserService {
+    /**
+     * @param name - имя пользователя
+     * @param pin - пинкод пользователя
+     * @return Optional<User>
+     */
+    Optional<User> findByNameAndPin(String name, String pin);
 
-    public Optional<User> findByNameAndPin(String name, String pin) {
-
-        return userRepository.findAllByNameAndPin(name, pin);
-    }
+    Optional<UserDto> create(UserDto userDto);
 }

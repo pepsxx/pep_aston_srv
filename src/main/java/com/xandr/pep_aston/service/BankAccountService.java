@@ -8,6 +8,7 @@ import com.xandr.pep_aston.entity.User;
 import com.xandr.pep_aston.mapper.BankAccountMapper;
 import com.xandr.pep_aston.mapper.UserMapper;
 import com.xandr.pep_aston.repository.BankAccountRepository;
+import com.xandr.pep_aston.repository.UserRepository;
 import com.xandr.pep_aston.validation.TransferMoneyValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,6 +27,8 @@ public class BankAccountService {
     private final UserMapper userMapper;
     private final UserService userService;
     private final BankAccountMapper bankAccountMapper;
+    private final int START_BALANCE = 0;
+    private final UserRepository userRepository;
     private final BankAccountRepository bankAccountRepository;
     private final TransferMoneyValidation transferMoneyValidation;
     private final TransactionMoneyService transactionMoneyService;
@@ -41,6 +45,23 @@ public class BankAccountService {
                         .build())
                 .map(bankAccountRepository::save)
                 .map(bankAccountMapper::BankAccountToBankAccountDto);
+
+    }
+
+    public Optional<List<BankAccountDto>> report() {
+
+        List<BankAccount> listBankAccount = bankAccountRepository.findAll();
+        if (listBankAccount.isEmpty()) {
+            return Optional.empty();
+        }
+
+        userRepository.findAllById(listBankAccount.stream()
+                .map(ba -> ba.getUser().getId())
+                .toList());
+
+        return Optional.of(listBankAccount.stream()
+                .map(bankAccountMapper::BankAccountToBankAccountDto)
+                .toList());
 
     }
 
