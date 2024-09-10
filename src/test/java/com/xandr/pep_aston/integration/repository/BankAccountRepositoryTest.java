@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
+import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,7 +29,7 @@ class BankAccountRepositoryTest extends IntegrationTestBase {
 
         user.setId(1L);
         bankAccount.setUser(user);
-        bankAccount.setMoney(0);
+        bankAccount.setMoney(BigDecimal.ZERO);
 
     }
 
@@ -80,7 +81,7 @@ class BankAccountRepositoryTest extends IntegrationTestBase {
 
         BankAccount actualResult = bankAccountRepository.save(bankAccount);
 
-        assertEquals(actualResult.getMoney(), 0, "Money should equal to 0");
+        assertEquals(actualResult.getMoney(), BigDecimal.ZERO, "Money should equal to 0");
         assertEquals(actualResult.getUser(), user, "BankAccount user should equal to same user");
 
     }

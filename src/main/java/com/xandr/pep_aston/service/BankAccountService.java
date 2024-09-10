@@ -27,12 +27,10 @@ public class BankAccountService {
     private final UserMapper userMapper;
     private final UserService userService;
     private final BankAccountMapper bankAccountMapper;
-    private final int START_BALANCE = 0;
     private final UserRepository userRepository;
     private final BankAccountRepository bankAccountRepository;
     private final TransferMoneyValidation transferMoneyValidation;
     private final TransactionMoneyService transactionMoneyService;
-    private final BigDecimal START_BALANCE = BigDecimal.valueOf(0);
 
     public Optional<BankAccountDto> createBankAccount(UserDto userDto) {
 
@@ -41,7 +39,7 @@ public class BankAccountService {
                 .flatMap(user -> userService.findByNameAndPin(user.getName(), user.getPin()))
                 .map(user -> BankAccount.builder()
                         .user(user)
-                        .money(START_BALANCE)
+                        .money(BigDecimal.ZERO)
                         .build())
                 .map(bankAccountRepository::save)
                 .map(bankAccountMapper::BankAccountToBankAccountDto);
