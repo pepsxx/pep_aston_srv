@@ -43,7 +43,7 @@ public class BankAccountController {
                 })
                 .orElseGet(() -> {
                     log.info("The BankAccount for {} do not created.", userName);
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                    return ResponseEntity.notFound().build();
                 });
 
     }
