@@ -3,6 +3,8 @@ package com.xandr.pep_aston.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -19,7 +21,7 @@ public class BankAccount {
     private Long id;
 
     @Column(nullable = false)
-    private Integer money;
+    private BigDecimal money;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
