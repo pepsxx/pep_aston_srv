@@ -21,6 +21,7 @@ public class UserService {
 
         return userRepository.findAllByNameAndPin(name, pin);
 
+
     }
 
     public Optional<UserDto> create(UserDto userDto) {
