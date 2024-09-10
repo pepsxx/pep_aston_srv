@@ -42,7 +42,7 @@ public class BankAccountController {
                 })
                 .orElseGet(() -> {
                     log.info("The BankAccount for {} do not created.", userName);
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                    return ResponseEntity.notFound().build();
                 });
 
     }
@@ -52,8 +52,8 @@ public class BankAccountController {
     {
 
         return bankAccountService.report()
-               .map(lba -> ResponseEntity.status(HttpStatus.OK).body(lba))
-               .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+               .map(ResponseEntity::ok)
+               .orElse(ResponseEntity.notFound().build());
 
     }
 }
