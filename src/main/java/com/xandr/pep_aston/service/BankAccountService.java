@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,14 +45,15 @@ public class BankAccountService {
             return Optional.empty();
         }
 
-        List<Long> listIdUser = new ArrayList<>();
-        listBankAccount.forEach(ba -> listIdUser.add(ba.getUser().getId()));
+        List<Long> listIdUser = listBankAccount.stream()
+                .map(ba -> ba.getUser().getId())
+                .toList();
+
         userRepository.findAllById(listIdUser);
 
-        List<BankAccountDto> listBankAccountDto = new ArrayList<>();
-        listBankAccount.forEach(ba -> listBankAccountDto.add(bankAccountMapper.BankAccountAndUserToBankAccountDto(ba, ba.getUser())));
-
-        return Optional.of(listBankAccountDto);
+        return Optional.of(listBankAccount.stream()
+                .map(ba -> bankAccountMapper.BankAccountAndUserToBankAccountDto(ba, ba.getUser()))
+                .toList());
 
     }
 }
