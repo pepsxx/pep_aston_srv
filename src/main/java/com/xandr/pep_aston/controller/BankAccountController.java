@@ -31,7 +31,7 @@ public class BankAccountController {
         if (bindingResult.hasErrors()) {
             // Не получилось убрать лог в aop, разобраться с Андреем
             Logger.setLogg(LoggerType.ERR, this.getClass().getSimpleName(), "Validation errors: %s".formatted(bindingResult.getFieldErrors()));
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.badRequest().build();
         }
 
         userDto.setPin(HashCodeUtil.getSHA256Hash(userDto.getPin()));
