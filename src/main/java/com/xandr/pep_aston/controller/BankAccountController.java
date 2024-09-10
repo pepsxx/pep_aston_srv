@@ -43,7 +43,7 @@ public class BankAccountController {
                 })
                 .orElseGet(() -> {
                     log.info("The BankAccount for {} do not created.", userName);
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                    return ResponseEntity.notFound().build();
                 });
 
     }
@@ -52,13 +52,13 @@ public class BankAccountController {
     public ResponseEntity<BankAccountDto> transferMoney(@RequestBody @Validated TransferDto transferDto, BindingResult bindingResult) {
 
         if (this.isNotValid(bindingResult)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.badRequest().build();
         }
 
         transferDto.setPin(HashCodeUtil.getSHA256Hash(transferDto.getPin()));
 
         return bankAccountService.transferMoney(transferDto)
-                .map(ba -> ResponseEntity.status(HttpStatus.OK).body(ba))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest().build());
     }
 
