@@ -9,4 +9,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findAllByNameAndPin(String name, String pin);
 
+    Optional<User> findFirstByName(String name);
+
 }
