@@ -45,11 +45,9 @@ public class BankAccountService {
             return Optional.empty();
         }
 
-        List<Long> listIdUser = listBankAccount.stream()
+        userRepository.findAllById(listBankAccount.stream()
                 .map(ba -> ba.getUser().getId())
-                .toList();
-
-        userRepository.findAllById(listIdUser);
+                .toList());
 
         return Optional.of(listBankAccount.stream()
                 .map(ba -> bankAccountMapper.BankAccountAndUserToBankAccountDto(ba, ba.getUser()))
