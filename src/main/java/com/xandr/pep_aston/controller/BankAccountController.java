@@ -37,7 +37,7 @@ public class BankAccountController {
         userDto.setPin(HashCodeUtil.getSHA256Hash(userDto.getPin()));
 
         return bankAccountService.createBankAccount(userDto)
-                .map(ba -> ResponseEntity.status(HttpStatus.CREATED).body(ba))
+                .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
 
     }
