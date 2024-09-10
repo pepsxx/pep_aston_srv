@@ -50,7 +50,7 @@ public class BankAccountService {
                 .toList());
 
         return Optional.of(listBankAccount.stream()
-                .map(ba -> bankAccountMapper.BankAccountAndUserToBankAccountDto(ba, ba.getUser()))
+                .map(bankAccountMapper::BankAccountToBankAccountDto)
                 .toList());
 
     }
