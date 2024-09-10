@@ -1,6 +1,7 @@
 package com.xandr.pep_aston.controller;
 
 import com.xandr.pep_aston.dto.BankAccountDto;
+import com.xandr.pep_aston.dto.TransferDto;
 import com.xandr.pep_aston.dto.UserDto;
 import com.xandr.pep_aston.log.Logger;
 import com.xandr.pep_aston.log.LoggerType;
@@ -39,13 +40,39 @@ public class BankAccountController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
 
     }
+
     @GetMapping("/report")
-    public ResponseEntity<List<BankAccountDto>> report()
-    {
+    public ResponseEntity<List<BankAccountDto>> report() {
 
         return bankAccountService.report()
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+
+    }
+
+    @PostMapping("/transfer")
+    public ResponseEntity<BankAccountDto> transferMoney(@RequestBody @Validated TransferDto transferDto, BindingResult bindingResult) {
+
+        if (this.isNotValid(bindingResult)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        transferDto.setPin(HashCodeUtil.getSHA256Hash(transferDto.getPin()));
+
+        return bankAccountService.transferMoney(transferDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().build());
+    }
+
+    private boolean isNotValid(BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            log.error("Validation errors: {}", bindingResult.getFieldErrors());
+            return true;
+        } else {
+            log.info("Validation successful");
+            return false;
+        }
 
     }
 }
