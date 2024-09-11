@@ -3,19 +3,20 @@ package com.xandr.pep_aston.integration.service;
 import com.xandr.pep_aston.dto.BankAccountDto;
 import com.xandr.pep_aston.dto.UserDto;
 import com.xandr.pep_aston.integration.IntegrationTestBase;
-import com.xandr.pep_aston.service.BankAccountService;
+import com.xandr.pep_aston.service.impl.BankAccountServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @RequiredArgsConstructor
-class BankAccountServiceTest extends IntegrationTestBase {
+class BankAccountServiceImplTest extends IntegrationTestBase {
 
-    private final BankAccountService bankAccountService;
+    private final BankAccountServiceImpl bankAccountServiceImpl;
 
     private static final String NAME_OK = "Nik";
     private static final String NAME_BAD = "PepBadStringForTestName";
@@ -28,7 +29,7 @@ class BankAccountServiceTest extends IntegrationTestBase {
     void actualResultNotNullIfArgsIsNull() {
 
         String message = "Result should be Optional";
-        assertNotNull(bankAccountService.createBankAccount(null), message);
+        assertNotNull(bankAccountServiceImpl.createBankAccount(null), message);
 
     }
 
@@ -40,15 +41,15 @@ class BankAccountServiceTest extends IntegrationTestBase {
 
         userDto.setPin(PIN_OK);
         userDto.setName(NAME_BAD);
-        assertTrue(bankAccountService.createBankAccount(userDto).isEmpty(), message + "the pin is incorrect.");
+        assertTrue(bankAccountServiceImpl.createBankAccount(userDto).isEmpty(), message + "the pin is incorrect.");
 
         userDto.setPin(PIN_BAD);
         userDto.setName(NAME_OK);
-        assertTrue(bankAccountService.createBankAccount(userDto).isEmpty(), message + "the name is incorrect.");
+        assertTrue(bankAccountServiceImpl.createBankAccount(userDto).isEmpty(), message + "the name is incorrect.");
 
         userDto.setPin(PIN_BAD);
         userDto.setName(NAME_BAD);
-        assertTrue(bankAccountService.createBankAccount(userDto).isEmpty(), message + "the name and pin is incorrect.");
+        assertTrue(bankAccountServiceImpl.createBankAccount(userDto).isEmpty(), message + "the name and pin is incorrect.");
 
     }
 
@@ -60,7 +61,7 @@ class BankAccountServiceTest extends IntegrationTestBase {
 
         userDto.setPin(PIN_OK);
         userDto.setName(NAME_OK);
-        assertTrue(bankAccountService.createBankAccount(userDto).isPresent(), message);
+        assertTrue(bankAccountServiceImpl.createBankAccount(userDto).isPresent(), message);
 
     }
 
@@ -70,12 +71,12 @@ class BankAccountServiceTest extends IntegrationTestBase {
 
         userDto.setPin(PIN_OK);
         userDto.setName(NAME_OK);
-        Optional<BankAccountDto> maybeActualResult = bankAccountService.createBankAccount(userDto);
+        Optional<BankAccountDto> maybeActualResult = bankAccountServiceImpl.createBankAccount(userDto);
 
         assertTrue(maybeActualResult.isPresent());
         BankAccountDto actualResult = maybeActualResult.get();
 
-        assertEquals(0, actualResult.getMoney(), "In new bankAccount money should be equals zero.");
+        assertEquals(BigDecimal.ZERO, actualResult.getMoney(), "In new bankAccount money should be equals zero.");
 
     }
 
@@ -85,12 +86,12 @@ class BankAccountServiceTest extends IntegrationTestBase {
 
         userDto.setPin(PIN_OK);
         userDto.setName(NAME_OK);
-        Optional<BankAccountDto> maybeActualResult = bankAccountService.createBankAccount(userDto);
+        Optional<BankAccountDto> maybeActualResult = bankAccountServiceImpl.createBankAccount(userDto);
 
         assertTrue(maybeActualResult.isPresent());
         BankAccountDto actualResult = maybeActualResult.get();
 
-        assertEquals(0, actualResult.getMoney(), "In new BankAccount money  should be equals zero");
+        assertEquals(BigDecimal.ZERO, actualResult.getMoney(), "In new BankAccount money  should be equals zero");
         assertEquals(NAME_OK, actualResult.getName(), "In new BankAccount UserName should be equals ExpectedUserName");
         assertTrue(actualResult.getNumberAccount() > 0, "In the new BankAccount NumberAccount must exist and be positive");
 

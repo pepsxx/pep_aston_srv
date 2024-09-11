@@ -7,11 +7,15 @@ import com.xandr.pep_aston.entity.User;
 import com.xandr.pep_aston.mapper.BankAccountMapper;
 import com.xandr.pep_aston.mapper.UserMapper;
 import com.xandr.pep_aston.repository.BankAccountRepository;
+import com.xandr.pep_aston.service.impl.BankAccountServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -20,7 +24,8 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class BankAccountServiceTest {
@@ -37,7 +42,7 @@ class BankAccountServiceTest {
     private static ArgumentCaptor<BankAccount> argumentCaptor;
 
     @InjectMocks
-    private static BankAccountService bankAccountService;
+    private static BankAccountServiceImpl bankAccountService;
 
     private static final BigDecimal START_BALANCE = BigDecimal.ZERO;
     private static final String PIN = "TestPin";
