@@ -1,4 +1,4 @@
-package com.xandr.pep_aston.service;
+package com.xandr.pep_aston.service.impl;
 
 import com.xandr.pep_aston.dto.BankAccountDto;
 import com.xandr.pep_aston.entity.BankAccount;
