@@ -3,11 +3,11 @@ package com.xandr.pep_aston.integration;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.springframework.boot.env.OriginTrackedMapPropertySource;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.PropertySource;
-import org.springframework.test.context.*;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
@@ -25,24 +25,6 @@ public abstract class IntegrationTestBase {
     public static void startContainer() {
 
         container.start();
-
-        // Это временно - Начало
-        ConfigurableEnvironment environment = (ConfigurableEnvironment) new TestContextManager(IntegrationTestBase.class)
-                .getTestContext()
-                .getApplicationContext()
-                .getEnvironment();
-
-        environment.getPropertySources().stream()
-                .filter(sp -> sp instanceof OriginTrackedMapPropertySource)
-                .map(sp -> (OriginTrackedMapPropertySource) sp)
-                .forEach(sp -> sp.getSource()
-                        .forEach((key, value) -> System.out.printf("%60s: %s%n", key, value)));
-
-        environment.getPropertySources().stream()
-                .filter(i -> i.getClass().getSimpleName().contains("Map"))
-                .map(PropertySource::getSource)
-                .forEach(System.out::println);
-        // Это временно - Конец
 
     }
 

@@ -12,8 +12,9 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "user")
 @Table(name="transaction_money")
-public class TransactionMoney {
+public class Transfer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

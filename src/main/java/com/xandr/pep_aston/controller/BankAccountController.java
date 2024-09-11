@@ -3,11 +3,11 @@ package com.xandr.pep_aston.controller;
 import com.xandr.pep_aston.dto.BankAccountDto;
 import com.xandr.pep_aston.dto.TransferDto;
 import com.xandr.pep_aston.dto.UserDto;
-import com.xandr.pep_aston.log.Logger;
-import com.xandr.pep_aston.log.LoggerType;
+import com.xandr.pep_aston.exception.RequestBodyValidationException;
 import com.xandr.pep_aston.service.BankAccountService;
 import com.xandr.pep_aston.util.HashCodeUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -24,13 +24,12 @@ public class BankAccountController {
 
     private final BankAccountService bankAccountService;
 
+    @SneakyThrows
     @PostMapping("/create")
     public ResponseEntity<BankAccountDto> createBankAccount(@RequestBody @Validated UserDto userDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            // Не получилось убрать лог в aop, разобраться с Андреем
-            Logger.setLogg(LoggerType.ERR, this.getClass().getSimpleName(), "Validation errors: %s".formatted(bindingResult.getFieldErrors()));
-            return ResponseEntity.badRequest().build();
+            throw new RequestBodyValidationException("Validation RequestBody Exception for UserDto");
         }
 
         userDto.setPin(HashCodeUtil.getSHA256Hash(userDto.getPin()));
@@ -50,11 +49,12 @@ public class BankAccountController {
 
     }
 
+    @SneakyThrows
     @PostMapping("/transfer")
     public ResponseEntity<BankAccountDto> transferMoney(@RequestBody @Validated TransferDto transferDto, BindingResult bindingResult) {
 
-        if (this.isNotValid(bindingResult)) {
-            return ResponseEntity.badRequest().build();
+        if (bindingResult.hasErrors()) {
+            throw new RequestBodyValidationException("Validation RequestBody Exception for TransferDto");
         }
 
         transferDto.setPin(HashCodeUtil.getSHA256Hash(transferDto.getPin()));
@@ -62,17 +62,5 @@ public class BankAccountController {
         return bankAccountService.transferMoney(transferDto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest().build());
-    }
-
-    private boolean isNotValid(BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            log.error("Validation errors: {}", bindingResult.getFieldErrors());
-            return true;
-        } else {
-            log.info("Validation successful");
-            return false;
-        }
-
     }
 }
