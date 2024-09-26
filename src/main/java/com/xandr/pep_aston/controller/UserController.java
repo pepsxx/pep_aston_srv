@@ -1,9 +1,11 @@
 package com.xandr.pep_aston.controller;
 
 import com.xandr.pep_aston.dto.UserDto;
+import com.xandr.pep_aston.exception.RequestBodyValidationException;
 import com.xandr.pep_aston.service.UserService;
 import com.xandr.pep_aston.util.HashCodeUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +24,12 @@ public class UserController {
 
     private final UserService userService;
 
+    @SneakyThrows
     @PostMapping("/create")
     public ResponseEntity<UserDto> create(@RequestBody @Validated UserDto userDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            log.error("Validation errors: {}", bindingResult.getFieldErrors());
-            return ResponseEntity.badRequest().build();
+            throw new RequestBodyValidationException("Validation RequestBody Exception for UserDto");
         }
 
         userDto.setPin(HashCodeUtil.getSHA256Hash(userDto.getPin()));
