@@ -1,9 +1,11 @@
+name: pep_aston_srv-40254             # Имя compose stack
 services:
-  aston_db_ps:
-    container_name: PostgreSQL-40254
-    image: postgres
+  my_name:                            # Имя ?
+    container_name: PostgresSQL-40254 # Имя container в stack
+    image: postgres                   # Название образа на котором основан контейнер
     ports:
-      - "40254:5432"
+      - "40254:5432"                  # forwarding port
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: qQ111111
+      POSTGRES_USER: admin            # Имя администратора db
+      POSTGRES_PASSWORD: qQ111111     # Пароль администратора db
+      POSTGRES_DB: pep_db             # Имя db
